@@ -1,13 +1,42 @@
 % Project 2
+info = audiodevinfo;
+info.input(1)
+info.input(2)
 
 Fs = 44000;
-f = 5000;
-w0 = 2*pi*f;
-n = (0:5);
-y = sin(w0*n);
+nBits = 8;
+nChannels = 1;
+duration = 5;
 
-file = 'team[6]-stereosoundfile.wav';
-[arr, Fs] = audioread(file);
+recorder = audiorecorder(Fs, nBits, nChannels, 1);
+
+%pause(3);
+disp("Get Ready")
+pause(1);
+
+disp("3")
+pause(1);
+
+disp("2")
+pause(1);
+
+disp("1")
+pause(1);
+
+disp("Start Speaking")
+
+record(recorder, duration);
+
+
+% Wait 5 seconds
+pause(duration);
+disp("Recording over")
+
+
+
+audioArray = getaudiodata(recorder, "double");
+
+sound(audioArray)
 
 window = hamming(512);
 N_overlap = 256;
