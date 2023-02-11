@@ -3,12 +3,31 @@
 Fs = 44000;
 f = 5000;  %For first part
 %f = 8000; % For second part
+
 w0 = 2*pi*f;
-n = 0:(1/Fs):duration;
+w0_1 = 2*pi*1568; % G6
+w0_2 = 2*pi*1760; % A6
+w0_3 = 2*pi*1397; % F6
+w0_4 = 2*pi*698; % F5
+w0_5 = 2*pi*1046; % C6
+
+%n = 0:(1/Fs):duration;
+n3_1 = 0: 1/Fs: 0.5;
+n3_2 = 0: 1/Fs: 0.75;
+n3_3 = 0: 1/Fs: 1;
+n3_4 = 0: 1/Fs: 0.75;
+n3_5 = 0: 1/Fs: 2;
 amp = 5;
 
 %y = amp*sin(w0*n);
-y = amp * chirp(n, 0, duration, 8000);
+%y = amp * chirp(n, 0, duration, 8000);
+y1 = amp*sin(w0_1*n3_1);
+y2 = amp*sin(w0_2*n3_2);
+y3 = amp*sin(w0_3*n3_3);
+y4 = amp*sin(w0_4*n3_4);
+y5 = amp*sin(w0_5*n3_5);
+
+
 
 % file = 'team[6]-stereosoundfile.wav';
 % [arr, Fs] = audioread(file);
@@ -42,9 +61,19 @@ disp("Sound")
 
 record(recorder, duration);
 
-sound(y, Fs)
+sound(y1, Fs)
+pause(0.5);
+sound(y2, Fs)
+pause(0.75);
+sound(y3, Fs)
+pause(1);
+sound(y4, Fs)
+pause(0.75);
+sound(y5, Fs)
+pause(2);
+
 % Wait 5 seconds
-pause(duration);
+%pause(duration);
 disp("Recording over")
 
 
@@ -80,12 +109,5 @@ ylabel('Frequency (Hz)');
 filename = 'team[6]-chirp.wav';
 audiowrite(filename, arr, Fs);
 audioinfo(filename)
-
-
-
-
-
-
-
 
 
