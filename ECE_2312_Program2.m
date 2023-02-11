@@ -106,7 +106,7 @@ ylim([0 8000]);
 xlabel('Time (s)');
 ylabel('Frequency (Hz)');
 
-filename = 'team[6]-chirp.wav';
+filename = 'team[6]-cetk.wav';
 audiowrite(filename, arr, Fs);
 audioinfo(filename)
 
