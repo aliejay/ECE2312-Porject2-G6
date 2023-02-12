@@ -1,6 +1,7 @@
 % Project 2
 
 Fs = 44000;
+Fs1 = 44000;
 f = 5000;  %For first part
 %f = 8000; % For second part
 
@@ -11,17 +12,16 @@ w0_3 = 2*pi*1397; % F6
 w0_4 = 2*pi*698; % F5
 w0_5 = 2*pi*1046; % C6
 
+duration = 5;
+
 n = 0:(1/Fs):duration;
 n3_1 = 0: 1/Fs: 0.5;
 n3_2 = 0: 1/Fs: 0.75;
 n3_3 = 0: 1/Fs: 1;
 n3_4 = 0: 1/Fs: 0.75;
 n3_5 = 0: 1/Fs: 2;
-amp = 10;
+amp = 1;
 
-N = 1;
-F = [0 0.45 0.55 1];
-A = [1 1 0 0];
 
 y = amp*sin(w0*n);
 %y = amp * chirp(n, 0, duration, 8000);
@@ -32,12 +32,11 @@ y4 = amp*sin(w0_4*n3_4);
 y5 = amp*sin(w0_5*n3_5);
 
 file1 = 'team[6]-stereosoundfile.wav';
-[arr, z] = audioread(file1);
+[arr, Fs] = audioread(file1);
 audioinfo(file1);
 
-file = 'team[6]-sinetone.wav';
-[arr1, Fs1] = audioread(file);
-audioinfo(file);
+
+
 
 % Project 2
 info = audiodevinfo;
@@ -46,24 +45,23 @@ info.input(2)
 
 nBits = 8;
 nChannels = 1;
-duration = 5;
 
 recorder = audiorecorder(Fs, nBits, nChannels, 1);
 
 %pause(3);
-disp("Get Ready")
-pause(1);
-
-disp("3")
-pause(1);
-
-disp("2")
-pause(1);
-
-disp("1")
-pause(1);
-
-disp("Sound")
+% disp("Get Ready")
+% pause(1);
+% 
+% disp("3")
+% pause(1);
+% 
+% disp("2")
+% pause(1);
+% 
+% disp("1")
+% pause(1);
+% 
+% disp("Sound")
 
 record(recorder, duration);
 
@@ -78,20 +76,34 @@ record(recorder, duration);
 % sound(y5, Fs)
 % pause(2);
 
+sound(y, Fs)
+sound(arr, Fs)
+
 % Wait 5 seconds
-%pause(duration);
-disp("Recording over")
+pause(duration);
+% disp("Recording over")
 
 %disp(y)
-%arr = getaudiodata(recorder, "double");
+arr1 = getaudiodata(recorder, "double");
+
+N = 255;
+F = [0 0.45 0.55 1];
+A = [1 1 0 0];
 
 b =  firls(N, F, A);
-
 disp(b)
-arr = arr + arr1;
+audio = filter(b, 1, arr1);
 
-audio = filter(b, b, arr);
-sound(arr, Fs)
+%arr = arr + arr1;
+% arr2 = zeros(length(arr), 1);
+% for i = 1:length(arr)
+%     arr2(i) = arr1(i) + arr(i);
+% end
+% 
+% arrMix = [arr(:), arr2(:)];
+
+
+
 
 clf
 t = [0: length(y)-1]/ Fs;
@@ -99,8 +111,6 @@ t = [0: length(y)-1]/ Fs;
 title("Audio")
 xlabel("Time (sec)")
 ylabel("Magnitude")
-
-
 
 
 window = hamming(512);
@@ -117,9 +127,10 @@ ylim([0 8000]);
 xlabel('Time (s)');
 ylabel('Frequency (Hz)');
 
-filename = 'team[6]-speechchirp.wav';
-audiowrite(filename, arr, Fs);
-audioinfo(filename)
+
+filename = 'team[6]-filteredspeechsine.wav';
+audiowrite(filename,audio,Fs);
+audioinfo(filename);
 
 
 
